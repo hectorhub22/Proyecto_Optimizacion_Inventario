@@ -1,0 +1,20 @@
+# Archivos de entorno de Python
+__pycache__/
+*.pyc
+venv/
+env/
+
+# Archivos de datos grandes (es mejor explicar en el README cómo obtenerlos)
+/data/
+
+# Modelos entrenados (son artefactos de construcción, no código fuente)
+/models/
+
+# Archivos generados por Quarto/Jupyter
+/portfolio-web/_site/
+/portfolio-web/.quarto/
+
+# Archivos de sistema operativo e IDE
+.DS_Store
+.idea/
+.vscode/

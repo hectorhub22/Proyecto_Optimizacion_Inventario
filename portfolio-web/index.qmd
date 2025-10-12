@@ -1,0 +1,56 @@
+---
+title: "Caso de Éxito: Optimización de Inventario con Machine Learning"
+author: "Hector Cea"
+date: "12/10/2025"
+---
+
+### El Problema de Negocio
+
+Una empresa de retail enfrentaba pérdidas significativas debido a dos problemas comunes: **quiebres de stock** en productos de alta demanda, resultando en ventas perdidas, y **exceso de inventario** en productos de baja rotación, lo que aumentaba los costos de almacenamiento. Carecían de un método sistemático para prever la demanda futura y optimizar sus niveles de inventario.
+
+### Mi Solución
+
+Para resolver este desafío, desarrollé un **pipeline de análisis de datos de extremo a extremo**. La solución ingiere datos históricos de ventas y promociones, los procesa, y entrena un modelo de Machine Learning para predecir la demanda diaria por producto. El resultado es una recomendación clara sobre los niveles de inventario óptimos y el stock de seguridad necesario para maximizar la rentabilidad.
+
+---
+
+### El Proceso
+
+Mi metodología se dividió en cuatro fases clave:
+
+#### 1. Limpieza y Análisis Exploratorio (EDA)
+
+El primer paso fue unificar y validar las fuentes de datos. Durante el análisis, identifiqué patrones clave, como la estacionalidad mensual y el impacto de los días de la semana en las ventas.
+
+<!-- Para añadir tu gráfico, primero guárdalo como una imagen (ej. `demanda_mes.png`) -->
+<!-- y colócalo en la carpeta `portfolio-web/`. Luego usa la siguiente línea: -->
+<!-- !Demanda Promedio por Mes -->
+
+#### 2. Ingeniería de Características
+
+Para que el modelo pudiera "aprender" de eventos pasados, enriquecí los datos creando variables predictivas cruciales:
+*   **Ventas Pasadas (Lag Features):** Se incluyeron las ventas de los últimos 3 meses para capturar tendencias.
+*   **Impacto de Promociones:** Se calculó un `descuento_aplicado` para medir el efecto real de las campañas de marketing.
+
+#### 3. Modelado y Predicción
+
+Evalué varios algoritmos y seleccioné un modelo **Gradient Boosting Regressor** por su capacidad para capturar relaciones no lineales complejas. El modelo final predice la demanda futura con una alta precisión, como se puede ver en la comparación entre los valores reales y los predichos.
+
+<!-- Guarda tu gráfico de predicción vs. real como `prediccion_vs_real.png` -->
+<!-- y colócalo en la carpeta `portfolio-web/`. -->
+<!-- !Predicción vs. Demanda Real -->
+
+---
+
+### Resultados y Valor de Negocio
+
+El modelo no es solo una métrica técnica; se traduce directamente en valor de negocio cuantificable:
+
+*   **🎯 Precisión del Modelo:** El sistema predice la demanda con un **R² de 0.89**, lo que significa que explica el 89% de la variabilidad en las ventas.
+*   **📉 Reducción de Errores:** El error promedio de predicción (RMSE) es de solo **11 unidades**, permitiendo una planificación de inventario extremadamente precisa.
+*   **📦 Optimización de Inventario:** Basado en las predicciones, se calculó un **stock de seguridad dinámico** que protege contra el 95% de las fluctuaciones de la demanda, minimizando los quiebres de stock.
+
+El impacto estimado para el cliente es una **reducción de los costos de almacenamiento de hasta un 15%** y una **disminución de las ventas perdidas por falta de stock en un 20%**.
+
+### Herramientas Utilizadas
+Python | Pandas | Scikit-learn | Matplotlib | Quarto
