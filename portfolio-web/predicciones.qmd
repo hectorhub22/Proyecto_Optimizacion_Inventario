@@ -1,0 +1,68 @@
+---
+title: "Análisis de Predicciones de Demanda"
+format: html
+---
+
+## Resumen de Compras Recomendadas
+
+A continuación se presenta una tabla con las predicciones de demanda para los próximos periodos. Utiliza el menú desplegable para filtrar por un producto específico y ver su pronóstico detallado.
+
+```{python}
+#| echo: false
+#| output: true
+
+import pandas as pd
+import plotly.express as px
+from ipywidgets import interact, Dropdown, VBox
+from IPython.display import display
+
+# Cargar los datos de predicciones generados por el script principal
+try:
+    df_preds = pd.read_csv('../data/predictions.csv', parse_dates=['Fecha'])
+    df_preds['cantidad_predicha'] = df_preds['cantidad_predicha'].round(0).astype(int)
+except FileNotFoundError:
+    print("El archivo 'data/predictions.csv' no fue encontrado. Por favor, ejecuta 'src/main.py' primero.")
+    df_preds = pd.DataFrame() # Crear un dataframe vacío para evitar más errores
+
+def show_product_details(producto):
+    if df_preds.empty:
+        return
+
+    # Filtrar datos para el producto seleccionado
+    df_filtered = df_preds[df_preds['id_producto'] == producto].sort_values('Fecha')
+    
+    # Crear el gráfico interactivo con Plotly
+    fig = px.line(
+        df_filtered, 
+        x='Fecha', 
+        y=['cantidad_vendida', 'cantidad_predicha'],
+        title=f'Demanda Real vs. Predicha para {producto}',
+        labels={'value': 'Cantidad', 'variable': 'Leyenda'},
+        markers=True
+    )
+    fig.update_layout(legend_title_text='')
+    
+    # Crear la tabla de recomendaciones
+    print(f"Recomendaciones de compra para {producto}:")
+    display(df_filtered[['Fecha', 'cantidad_vendida', 'cantidad_predicha']].rename(columns={
+        'cantidad_vendida': 'Venta Real',
+        'cantidad_predicha': 'Compra Recomendada'
+    }).reset_index(drop=True))
+    
+    # Mostrar el gráfico
+    fig.show()
+
+# Crear el widget de menú desplegable
+if not df_preds.empty:
+    product_list = sorted(df_preds['id_producto'].unique())
+    product_dropdown = Dropdown(
+        options=product_list,
+        description='Producto:',
+        value=product_list[0]
+    )
+
+    # Conectar el widget a la función de visualización
+    interactive_output = interact(show_product_details, producto=product_dropdown)
+else:
+    print("No hay datos para mostrar.")
+

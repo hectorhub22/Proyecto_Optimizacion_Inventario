@@ -1,8 +1,9 @@
-from data_processing import load_data, clean_sales_data, clean_promos_data
+from data_processing import load_data, clean_sales_data, clean_promos_data # Asegúrate de que este archivo exista y contenga las funciones
 from feature_engineering import feature_engineering
 from modeling import train_and_evaluate_model, calculate_inventory_levels, save_model
 from perform_eda import perform_eda
 import config
+import pandas as pd
 
 def main():
     """Función principal para ejecutar el pipeline de análisis."""
@@ -32,11 +33,25 @@ def main():
 
     # --- 5. Modelado y Evaluación ---
     print("\nEntrenando y evaluando el modelo...")
-    model, y_test, y_pred = train_and_evaluate_model(df_featured)
+    model, X_test, y_test, y_pred = train_and_evaluate_model(df_featured)
     save_model(model, config.MODEL_PATH)
 
     # --- 6. Conclusiones Logísticas ---
     calculate_inventory_levels(y_test, y_pred)
+
+    # --- 7. Guardar Predicciones Detalladas ---
+    print("\nGuardando predicciones detalladas...")
+    # Reconstruimos un DataFrame con la información original y las predicciones
+    df_predictions = df_featured.loc[X_test.index].copy()
+    df_predictions['cantidad_predicha'] = y_pred
+    
+    # Seleccionamos columnas relevantes para el reporte
+    report_cols = ['id_producto', 'Fecha', 'cantidad_vendida', 'cantidad_predicha', 'precio_unitario']
+    df_report = df_predictions[report_cols]
+    
+    predictions_path = pd.io.common.build_path(config.DATA_DIR, 'predictions.csv')
+    df_report.to_csv(predictions_path, index=False)
+    print(f"Reporte de predicciones guardado en: {predictions_path}")
 
 
 if __name__ == "__main__":

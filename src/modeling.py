@@ -30,7 +30,7 @@ def train_and_evaluate_model(df):
     plt.legend()
     plt.show()
 
-    return gb_model, y_test, y_pred_gb
+    return gb_model, X_test, y_test, y_pred_gb
 
 def save_model(model, path):
     """Guarda el modelo entrenado en un archivo."""
